@@ -5,7 +5,7 @@
  * @format
  */
 
-import {View, StyleSheet, Text, Alert} from 'react-native';
+import {View, StyleSheet, Text, Alert, Platform} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {OtplessModule} from 'otpless-react-native';
 import {TouchableOpacity} from 'react-native';
@@ -21,6 +21,10 @@ function App(): React.JSX.Element {
     method: 'get',
     params: {
       cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
+      login_uri:
+        Platform.OS === 'ios'
+          ? 'com.reactnative.app.otpless://otpless'
+          : 'com.reactnative.app', //Add this code when your package id contains, capital letter, numbers, underscore (_)
     },
   };
 
