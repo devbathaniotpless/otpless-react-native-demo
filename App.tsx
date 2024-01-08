@@ -21,12 +21,11 @@ function App(): React.JSX.Element {
     method: 'get',
     params: {
       cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
-      uxmode: 'anf', // Add this code to enable autoclick mode
     },
   };
 
   const openLoginPage = () => {
-    module.startWithParams(extra, data => {
+    module.showLoginPage(data => {
       let message: string = '';
       if (data.data === null || data.data === undefined) {
         message = data.errorMessage;
@@ -36,7 +35,7 @@ function App(): React.JSX.Element {
         updateString(message);
         // todo here
       }
-    });
+    }, extra);
   };
 
   return (
