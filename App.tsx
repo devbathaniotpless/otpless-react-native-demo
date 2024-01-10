@@ -5,9 +5,10 @@
  * @format
  */
 
-import {View, StyleSheet, Text, Alert} from 'react-native';
+import {View, StyleSheet, Text, Alert, Platform} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {OtplessModule} from 'otpless-react-native';
+import {TouchableOpacity} from 'react-native';
 
 function App(): React.JSX.Element {
   const module = new OtplessModule();
@@ -20,7 +21,10 @@ function App(): React.JSX.Element {
     method: 'get',
     params: {
       cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
-      crossButtonHidden: 'true',
+      login_uri:
+        Platform.OS === 'ios'
+          ? 'com.reactnative.app.otpless://otpless'
+          : 'com.reactnative.app', //Add this code when your package id contains, capital letter, numbers, underscore (_)
     },
   };
 
@@ -38,19 +42,37 @@ function App(): React.JSX.Element {
     }, extra);
   };
 
-  useEffect(() => {
-    openLoginPage();
-    return () => {};
-  }, []);
   return (
-    <View style={styles.row}>
-      <Text style={styles.tokentitleTextstyle}>Token : </Text>
-      <Text style={styles.tokenTextStyle}>{token}</Text>
+    <View style={styles.column}>
+      <View style={styles.row}>
+        <Text style={styles.tokentitleTextstyle}>Token : </Text>
+        <Text style={styles.tokenTextStyle}>{token}</Text>
+      </View>
+      <TouchableOpacity style={styles.button} onPress={openLoginPage}>
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  column: {
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button: {
+    backgroundColor: 'blue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 50,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    textAlign: 'center',
+  },
   tokentitleTextstyle: {
     color: 'white',
     fontSize: 16,
@@ -65,7 +87,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center', // Align items vertically at the center
-    height: '100%',
   },
 });
 
