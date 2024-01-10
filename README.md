@@ -1,79 +1,173 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# React Native
 
-# Getting Started
+Integrating One Tap OTPLESS Sign In into your React Native Application using our SDK is a streamlined process. This guide offers a comprehensive walkthrough, detailing the steps to install the SDK and seamlessly retrieve user information.
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+1. Install **OTPless SDK** Dependency
 
-## Step 1: Start the Metro Server
-
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
-
-To start Metro, run the following command from the _root_ of your React Native project:
-
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+```json
+npm i otpless-react-native
 ```
 
-## Step 2: Start your Application
+2. Configure **AndroidManifest.xml**
 
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
+`Android`
 
-### For Android
+- Add an intent filter inside your Main Activity code block.
 
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+```xml
+<intent-filter>
+<action android:name="android.intent.action.VIEW" />
+<category android:name="android.intent.category.DEFAULT" />
+<category android:name="android.intent.category.BROWSABLE" />
+<data
+	android:host="otpless"
+	android:scheme= "${applicationId}.otpless"/>
+</intent-filter>
 ```
 
-### For iOS
+- Change your activity launchMode to singleTop and exported true for your Main Activity.
 
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+```xml
+android:launchMode="singleTop"
+android:exported="true"
 ```
 
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
+- 1.**Handle Callback**
 
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
+- Import the following classes.
 
-## Step 3: Modifying your App
+```xml
+import com.otplessreactnative.OtplessReactNativeManager;
+import android.content.Intent;
+```
 
-Now that you have successfully run the app, let's modify it.
+- Add this code to your onNewIntent() method in your main activity.
 
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
+```java
+@Override
+public void onNewIntent(Intent intent) {
+	super.onNewIntent(intent);
+	OtplessReactNativeManager.INSTANCE.onNewIntent(intent);
+}
+```
 
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
+- 2.**Handle Backpress**
 
-## Congratulations! :tada:
+- Add this code to your onBackPressed() method in your main activity.
 
-You've successfully run and modified your React Native App. :partying_face:
+```java
+@Override
+public void onBackPressed() {
+	if (OtplessReactNativeManager.INSTANCE.onBackPressed()) return;
+	super.onBackPressed();
+}
+```
 
-### Now what?
+`iOS`
 
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
+- Go to your project's root folder in the terminal and run.
 
-# Troubleshooting
+```json
+pod install
+```
 
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
+- Copy-paste the following code into your info.plist file.
 
-# Learn More
+```xml
+<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+    <key>CFBundleURLSchemes</key>
+    <array>
+    <string>$(PRODUCT_BUNDLE_IDENTIFIER).otpless</string>
+    </array>
+    <key>CFBundleTypeRole</key>
+    <string>Editor</string>
+    <key>CFBundleURLName</key>
+    <string>otpless</string>
+    </dict>
+</array>
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>whatsapp</string>
+    <string>otpless</string>
+    <string>gootpless</string>
+    <string>com.otpless.ios.app.otpless</string>
+    <string>googlegmail</string>
+</array>
+```
 
-To learn more about React Native, take a look at the following resources:
+Go to build settings. Search for defines module, this option will appear in packaging change it to yes.
 
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+Create connector.swift file and it will ask to create bridging header, Click yes.
+
+- Copy-paste the following code into your connector.swift file.
+
+```swift
+import OtplessSDK
+import Foundation
+class Connector: NSObject {
+ @objc public static func loadUrl(_ url: NSURL) {
+  Otpless.sharedInstance.processOtplessDeeplink(url: url as URL)
+ }
+}
+```
+
+- Add the following code into your respective AppDelegate files.
+
+```swift
+#import "{{your_project_name}}-Swift.h"
+
+//add this inside of class
+- (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
+ [super application:app openURL:url options:options];
+ [Connector loadUrl:url];
+ return true;
+}
+```
+
+3. **Configure Sign up/Sign in**
+
+- Import the OTPLESS package on your page.
+
+```tsx
+import {OtplessModule} from 'otpless-react-native';
+```
+
+- Add this code to handle callback from OTPLESS SDK.
+
+```tsx
+const module = new OtplessModule();
+const extra = {
+  method: 'get',
+  params: {
+    cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
+    uxmode: 'anf', // Add this code to enable autoclick mode
+  },
+};
+
+//call this to you onPress
+
+const openLoginPage = () => {
+  module.startWithParams(extra, data => {
+    let message: string = '';
+    if (data.data === null || data.data === undefined) {
+      message = data.errorMessage;
+    } else {
+      message = data.data.token;
+      console.log(message);
+      updateString(message);
+      // todo here
+    }
+  });
+};
+```
+
+[Check out function](https://github.com/devbathaniotpless/otpless-react-native-demo/blob/autoclick-demo/App.tsx#L28)
+
+**Demo**
+[Demo Video](demo_video.mp4)
+
+# Thank You
+
+# [Visit OTPless](https://otpless.com/platforms/react-native)
