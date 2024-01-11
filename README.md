@@ -110,6 +110,9 @@ class Connector: NSObject {
  @objc public static func loadUrl(_ url: NSURL) {
   Otpless.sharedInstance.processOtplessDeeplink(url: url as URL)
  }
+    @objc public static func isOtplessDeeplink(_ url: NSURL) -> Bool {
+     return Otpless.sharedInstance.isOtplessDeeplink(url: url as URL)
+    }
 }
 ```
 
@@ -120,11 +123,13 @@ class Connector: NSObject {
 
 //add this inside of class
 - (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
- [super application:app openURL:url options:options];
- [Connector loadUrl:url];
+    if([Connector isOtplessDeeplink:url]){
+            [Connector loadUrl:url];
+            return true;
+        }
+     [super application:app openURL:url options:options];
  return true;
 }
-```
 
 3. **Configure Sign up/Sign in**
 
