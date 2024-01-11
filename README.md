@@ -4,7 +4,7 @@ Integrating One Tap OTPLESS Sign In into your React Native Application using our
 
 1. Install **OTPless SDK** Dependency
 
-```json
+```
 npm i otpless-react-native
 ```
 
