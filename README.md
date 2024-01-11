@@ -110,21 +110,26 @@ class Connector: NSObject {
  @objc public static func loadUrl(_ url: NSURL) {
   Otpless.sharedInstance.processOtplessDeeplink(url: url as URL)
  }
+    @objc public static func isOtplessDeeplink(_ url: NSURL) -> Bool {
+     return Otpless.sharedInstance.isOtplessDeeplink(url: url as URL)
+    }
 }
 ```
 
 - Add the following code into your respective AppDelegate files.
 
-```swift
+````swift
 #import "{{your_project_name}}-Swift.h"
 
 //add this inside of class
 - (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
- [super application:app openURL:url options:options];
- [Connector loadUrl:url];
+    if([Connector isOtplessDeeplink:url]){
+            [Connector loadUrl:url];
+            return true;
+        }
+     [super application:app openURL:url options:options];
  return true;
 }
-```
 
 3. **Configure Sign up/Sign in**
 
@@ -132,7 +137,7 @@ class Connector: NSObject {
 
 ```tsx
 import {OtplessModule} from 'otpless-react-native';
-```
+````
 
 - Add this code to handle callback from OTPLESS SDK.
 
