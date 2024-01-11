@@ -6,8 +6,11 @@
 @implementation AppDelegate
 
 - (BOOL) application:(UIApplication *)app openURL:(NSURL *)url options:(NSDictionary<UIApplicationOpenURLOptionsKey,id> *)options {
- [super application:app openURL:url options:options];
- [Connector loadUrl:url];
+    if([Connector isOtplessDeeplink:url]){
+            [Connector loadUrl:url];
+            return true;
+        }
+     [super application:app openURL:url options:options];
  return true;
 }
 
