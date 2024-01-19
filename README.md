@@ -118,7 +118,7 @@ class Connector: NSObject {
 
 - Add the following code into your respective AppDelegate files.
 
-```swift
+````swift
 #import "{{your_project_name}}-Swift.h"
 
 //add this inside of class
@@ -137,7 +137,7 @@ class Connector: NSObject {
 
 ```tsx
 import {OtplessModule} from 'otpless-react-native';
-```
+````
 
 - Add this code to handle callback from OTPLESS SDK.
 
@@ -154,8 +154,17 @@ const extra = {
   },
 };
 
-//call this to you onPress
+// This code will be used to detect the whatsapp installed status in users device
+// If you are using WHATSAPP login then its reqiured to add this code to hide the OTPless functionality
+const isWhatsappInstalled = () => {
+  module.isWhatsappInstalled(hasWhatsapp => {
+    console.log(hasWhatsapp);
+  });
+};
+
+//This function is used to trigger OTPless login page
 const openLoginPage = () => {
+  isWhatsappInstalled();
   module.showLoginPage(data => {
     let message: string = '';
     if (data.data === null || data.data === undefined) {
