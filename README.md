@@ -150,8 +150,17 @@ const extra = {
   },
 };
 
-//call this to you onPress
+// This code will be used to detect the whatsapp installed status in users device
+// If you are using WHATSAPP login then its reqiured to add this code to hide the OTPless functionality
+const isWhatsappInstalled = () => {
+  module.isWhatsappInstalled(hasWhatsapp => {
+    console.log(hasWhatsapp);
+  });
+};
+
+//This function is used to trigger OTPless login page
 const openLoginPage = () => {
+  isWhatsappInstalled();
   module.showLoginPage(data => {
     let message: string = '';
     if (data.data === null || data.data === undefined) {

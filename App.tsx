@@ -13,6 +13,7 @@ import {TouchableOpacity} from 'react-native';
 function App(): React.JSX.Element {
   const module = new OtplessModule();
   const [token, setMyToken] = useState('');
+
   // Function to update the string value
   const updateString = (userToken: string) => {
     setMyToken(userToken);
@@ -23,8 +24,13 @@ function App(): React.JSX.Element {
       cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
     },
   };
-
+  const isWhatsappInstalled = () => {
+    module.isWhatsappInstalled(hasWhatsapp => {
+      console.log(hasWhatsapp);
+    });
+  };
   const openLoginPage = () => {
+    isWhatsappInstalled();
     module.showLoginPage(data => {
       let message: string = '';
       if (data.data === null || data.data === undefined) {
