@@ -25,6 +25,7 @@ function App(): React.JSX.Element {
         Platform.OS === 'ios'
           ? 'com.reactnative.app.otpless://otpless'
           : 'com.reactnative.app', //Add this code when your package id contains, capital letter, numbers, underscore (_)
+      appId: 'BXNT2846KMQM00BIJ0Y0', //Add your appId value provided from the dashboard
     },
   };
 

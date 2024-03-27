@@ -151,6 +151,7 @@ const extra = {
       Platform.OS === 'ios'
         ? 'com.reactnative.app.otpless://otpless'
         : 'com.reactnative.app', //Add this code when your package id contains, capital letter, numbers, underscore (_) <Add you own login uri value>
+    appId: 'BXNT2846KMQM00BIJ0Y0', //Add your appId value provided from the dashboard
   },
 };
 
