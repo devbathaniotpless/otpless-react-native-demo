@@ -147,6 +147,7 @@ const extra = {
   method: 'get',
   params: {
     cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
+    appId: 'BXNT2846KMQM00BIJ0Y0', //Add your appId value provided from the dashboard
   },
 };
 
