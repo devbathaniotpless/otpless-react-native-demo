@@ -144,13 +144,8 @@ import {OtplessModule} from 'otpless-react-native';
 
 ```tsx
 const module = new OtplessModule();
-const extra = {
-  method: 'get',
-  params: {
-    cid: 'HRIRBIIKXMKEOTDDA8VV4HP2V24454X8', // Add your CID value provided from the dashboard
-    crossButtonHidden: 'true',
-    appId: 'BXNT2846KMQM00BIJ0Y0', //Add your appId value provided from the dashboard
-  },
+let request = {
+  appId: 'YOUR_APP_Id',
 };
 
 // This code will be used to detect the whatsapp installed status in users device
@@ -169,12 +164,10 @@ const openLoginPage = () => {
     if (data.data === null || data.data === undefined) {
       message = data.errorMessage;
     } else {
-      message = data.data.token;
-      console.log(message);
-      updateString(message);
+      message = 'token: ${data.data.token}';
       // todo here
     }
-  }, extra);
+  }, request);
 };
 
 useEffect(() => {
