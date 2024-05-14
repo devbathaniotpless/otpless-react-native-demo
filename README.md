@@ -21,7 +21,7 @@ npm i otpless-react-native
 <category android:name="android.intent.category.BROWSABLE" />
 <data
 	android:host="otpless"
-	android:scheme= "${applicationId}.otpless"/>
+	android:scheme= "otpless.YOUR_APP_ID"/>
 </intent-filter>
 ```
 
@@ -79,7 +79,7 @@ pod install
     <dict>
     <key>CFBundleURLSchemes</key>
     <array>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER).otpless</string>
+    <string>otpless.YOUR_APP_ID</string>
     </array>
     <key>CFBundleTypeRole</key>
     <string>Editor</string>
@@ -145,7 +145,7 @@ import {OtplessModule} from 'otpless-react-native';
 ```tsx
 const module = new OtplessModule();
 let request = {
-  appId: 'YOUR_APP_Id',
+  appId: 'YOUR_APP_ID',
 };
 
 // This code will be used to detect the whatsapp installed status in users device
@@ -157,23 +157,57 @@ const isWhatsappInstalled = () => {
 };
 
 //This function is used to trigger OTPless login page
-const openLoginPage = () => {
-  isWhatsappInstalled();
-  module.showLoginPage(data => {
-    let message: string = '';
-    if (data.data === null || data.data === undefined) {
-      message = data.errorMessage;
-    } else {
-      message = 'token: ${data.data.token}';
-      // todo here
-    }
-  }, request);
+useEffect(() => {
+  module.initHeadless('BXNT2846KMQM00BIJ0Y0');
+  module.setHeadlessCallback(onHeadlessResult);
+  return () => {
+    module.clearListener();
+  };
+}, []);
+const onHeadlessResult = (data: any) => {
+  let dataStr = JSON.stringify(data);
 };
 
-useEffect(() => {
-  openLoginPage();
-  return () => {};
-}, []);
+//Login Methods
+const whatsAppLogin = () => {
+  const headlessRequest = {channelType: 'WHATSAPP'};
+  module.startHeadless(headlessRequest);
+};
+
+const googleLogin = () => {
+  const headlessRequest = {channelType: 'GMAIL'};
+  module.startHeadless(headlessRequest);
+};
+
+const phoneEmailLogin = () => {
+  if (otp === '') {
+    if (email === '') {
+      const headlessRequest = {
+        phone: phoneNumber,
+        countryCode: '91',
+      };
+      module.startHeadless(headlessRequest);
+    } else {
+      const headlessRequest = {email: email};
+      module.startHeadless(headlessRequest);
+    }
+  } else {
+    if (email === '') {
+      const headlessRequest = {
+        phone: phoneNumber,
+        countryCode: '91',
+        otp: otp,
+      };
+      module.startHeadless(headlessRequest);
+    } else {
+      const headlessRequest = {
+        email: email,
+        otp: otp,
+      };
+      module.startHeadless(headlessRequest);
+    }
+  }
+};
 ```
 
 [Check out function](https://github.com/devbathaniotpless/otpless-react-native-demo/blob/main/App.tsx#L27)
