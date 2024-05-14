@@ -21,7 +21,7 @@ npm i otpless-react-native
 <category android:name="android.intent.category.BROWSABLE" />
 <data
 	android:host="otpless"
-	android:scheme= "${applicationId}.otpless"/>
+	android:scheme= "otpless.YOUR_APP_ID"/>
 </intent-filter>
 ```
 
@@ -79,7 +79,7 @@ pod install
     <dict>
     <key>CFBundleURLSchemes</key>
     <array>
-    <string>$(PRODUCT_BUNDLE_IDENTIFIER).otpless</string>
+    <string>otpless.YOUR_APP_ID</string>
     </array>
     <key>CFBundleTypeRole</key>
     <string>Editor</string>
@@ -145,7 +145,7 @@ import {OtplessModule} from 'otpless-react-native';
 ```tsx
 const module = new OtplessModule();
 let request = {
-  appId: 'YOUR_APP_Id',
+  appId: 'YOUR_APP_ID',
 };
 
 // This code will be used to detect the whatsapp installed status in users device
