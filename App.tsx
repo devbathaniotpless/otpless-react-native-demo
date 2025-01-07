@@ -10,11 +10,9 @@ import {OtplessHeadlessModule} from 'otpless-react-native';
 import {
   View,
   TextInput,
-  Button,
   StyleSheet,
   TouchableOpacity,
   Text,
-  Alert,
 } from 'react-native';
 
 function App(): React.JSX.Element {
@@ -27,11 +25,11 @@ function App(): React.JSX.Element {
 
   // This code will be used to detect the whatsapp installed status in users device
   // If you are using WHATSAPP login then its reqiured to add this code to hide the OTPless functionality
-  const isWhatsappInstalled = () => {
-    module.isWhatsappInstalled(hasWhatsapp => {
-      console.log(hasWhatsapp);
-    });
-  };
+  // const isWhatsappInstalled = () => {
+  //   module.isWhatsappInstalled(hasWhatsapp => {
+  //     console.log(hasWhatsapp);
+  //   });
+  // };
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
@@ -90,7 +88,7 @@ function App(): React.JSX.Element {
   };
 
   useEffect(() => {
-    module.initHeadless('BXNT2846KMQM00BIJ0Y0');
+    module.initHeadless('SUDJU2N3M8Q5XB3H6HN5');
     module.setHeadlessCallback(onHeadlessResult);
     return () => {
       module.clearListener();
@@ -98,6 +96,8 @@ function App(): React.JSX.Element {
   }, []);
   const onHeadlessResult = (data: any) => {
     let dataStr = JSON.stringify(data);
+    console.log(dataStr);
+    updateString(dataStr);
   };
   return (
     <View
